@@ -1,0 +1,30 @@
+README:
+
+# Autonomous Vihecle Architecture:
+The vehicle has 4 major subsystems:
+
+![01_Autonomous_Vevhicle_Architecture](results/01_Autonomous_Vevhicle_Architecture.png)
+
+In the following, I put very good explanation videos from [Udacity](https://classroom.udacity.com) to learn more about the subsytems.
+
+## The sensor subsystem
+Sensors are the hardware components your car uses to observe the world such as cameras and lidar.
+![02_sensor_subsystem](results/02_sensor_subsystem.png)
+
+
+## The Perception Subsystem
+Learn [here](https://www.youtube.com/watch?time_continue=48&v=zo_JO5Sytuc&feature=emb_logo) and [here](https://www.youtube.com/watch?v=f3qloIYf16k&feature=emb_logo) about the perception subsystem in the architecture of autonomous vihecles. 
+
+## The Planning Subsystem
+Learn [here](https://www.youtube.com/watch?time_continue=1&v=MxG9DtKiSqM&feature=emb_logo) and [here](https://www.youtube.com/watch?time_continue=19&v=5c752eVAR3I&feature=emb_logo) about the planning subsystem in the architecture of autonomous vihecles.
+
+## The Control Subsystem
+Learn [here](https://www.youtube.com/watch?time_continue=2&v=6pFy9q_AOJA&feature=emb_logo) about the Control subsystem in the architecture of autonomous vihecles.
+
+# ROS
+For communications between systems, we use the Robot Operating System (ROS). It is a set of software libraries and tools that help you build robot applications. From drivers to state-of-the-art algorithms, and with powerful developer tools, ROS has what you need for your robotics project. And it's all open source. 
+If you are beginner and not familiar with ROS, for learning about ROS, I highly suggest you to start from [here](http://wiki.ros.org/ROS/Tutorials). 
+
+## Importance of ROS for SDC
+Once you build a self-driving car (SDC), you often have up to 50 processes running at the same time. Some might even crash while you are driving. So, having a felxible architecture like ROS wrapped around it would be supremely helpful to build scalable software. 
+ 
