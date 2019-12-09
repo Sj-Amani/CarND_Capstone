@@ -1,0 +1,12 @@
+sys_int_Data
+sys_int.x86
+sys_int.x86_64
+
+*.py[cod]
+
+build
+devel
+
+profile.tmp
+
+**/*.pb
