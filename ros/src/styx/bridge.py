@@ -35,6 +35,7 @@ TYPE = {
     'image':Image
 }
 
+EVERY_NTH_IMAGE = 6
 
 class Bridge(object):
     def __init__(self, conf, server):
@@ -44,12 +45,13 @@ class Bridge(object):
         self.yaw = None
         self.angular_vel = 0.
         self.bridge = CvBridge()
+        self.n = 0 # counter: using every mth time for images
 
         self.callbacks = {
             '/vehicle/steering_cmd': self.callback_steering,
             '/vehicle/throttle_cmd': self.callback_throttle,
             '/vehicle/brake_cmd': self.callback_brake,
-        '/final_waypoints': self.callback_path
+	    '/final_waypoints': self.callback_path
         }
 
         self.subscribers = [rospy.Subscriber(e.topic, TYPE[e.type], self.callbacks[e.topic])
@@ -175,12 +177,19 @@ class Bridge(object):
         self.publishers['dbw_status'].publish(Bool(data))
 
     def publish_camera(self, data):
-        imgString = data["image"]
-        image = PIL_Image.open(BytesIO(base64.b64decode(imgString)))
-        image_array = np.asarray(image)
+        if self.n == 0:
+           imgString = data["image"]
+           image = PIL_Image.open(BytesIO(base64.b64decode(imgString)))
+           image_array = np.asarray(image)
+           image_message = self.bridge.cv2_to_imgmsg(image_array, encoding="rgb8")
+           self.publishers['image'].publish(image_message)
+           #print((rospy.get_time(), "image"))
 
-        image_message = self.bridge.cv2_to_imgmsg(image_array, encoding="rgb8")
-        self.publishers['image'].publish(image_message)
+        self.n += 1
+        self.n = self.n % EVERY_NTH_IMAGE
+
+        #j = PIL_Image.fromarray(image_array)
+        #j.save("/media/sf_Share/one.bmp")
 
     def callback_steering(self, data):
         self.server('steer', data={'steering_angle': str(data.steering_wheel_angle_cmd)})
@@ -192,15 +201,15 @@ class Bridge(object):
         self.server('brake', data={'brake': str(data.pedal_cmd)})
 
     def callback_path(self, data):
-        x_values = []
-        y_values = []
-        z_values = []
-        for waypoint in data.waypoints:
-            x = waypoint.pose.pose.position.x
-            y = waypoint.pose.pose.position.y
-            z = waypoint.pose.pose.position.z+0.5
-            x_values.append(x)
-            y_values.append(y)
-            z_values.append(z)
+	x_values = []
+	y_values = []
+	z_values = []
+	for waypoint in data.waypoints:
+		x = waypoint.pose.pose.position.x
+		y = waypoint.pose.pose.position.y
+		z = waypoint.pose.pose.position.z+0.5
+		x_values.append(x)
+		y_values.append(y)
+		z_values.append(z)
 
-        self.server('drawline', data={'next_x': x_values, 'next_y': y_values, 'next_z': z_values})
+	self.server('drawline', data={'next_x': x_values, 'next_y': y_values, 'next_z': z_values})
